@@ -13,9 +13,9 @@ export default function Header({ setSidebarOpen }: any) {
       border-b border-white/10
       shadow-lg"
     >
-      {/* ☰ Menu */}
+      {/* ☰ Bouton */}
       <button
-        onClick={() => setSidebarOpen(true)}
+        onClick={() => setSidebarOpen((prev: boolean) => !prev)}
         className="text-white text-xl hover:text-[var(--color-gold)] transition"
       >
         <FaBars />
