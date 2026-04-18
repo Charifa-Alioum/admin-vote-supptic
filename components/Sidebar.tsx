@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
+import { useTheme } from "@/app/ThemeProvider";
+import { useLanguage } from "@/components/LanguageProvider";
 import toast from "react-hot-toast";
 
 import {
@@ -11,6 +13,7 @@ import {
   FaUsers,
   FaSignOutAlt,
   FaMoon,
+  FaSun,
 } from "react-icons/fa";
 
 interface SidebarProps {
@@ -18,35 +21,27 @@ interface SidebarProps {
   setSidebarOpen: (open: boolean) => void;
 }
 
-export default function Sidebar({
-  sidebarOpen,
-  setSidebarOpen,
-}: SidebarProps) {
+export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const { theme, toggleTheme } = useTheme();
+  const { t } = useLanguage();
 
   // 🔓 Logout
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    toast.success("Déconnexion réussie");
+    toast.success(t("Déconnexion réussie"));
     router.push("/login");
   };
 
-  // 🌙 Dark mode
-  const toggleDarkMode = () => {
-    document.documentElement.classList.toggle("dark");
-  };
-
   // 🔥 Fermer menu (mobile UX)
-  const handleNavigation = () => {
-    setSidebarOpen(false);
-  };
+  const handleNavigation = () => setSidebarOpen(false);
 
-  // 🎯 Style actif
+  // 🎯 Style lien actif/inactif
   const linkClass = (path: string) =>
     `flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${
       pathname === path
-        ? "bg-[var(--color-gold)] text-black shadow-lg"
+        ? "bg-[var(--color-gold)] text-black font-semibold shadow-lg"
         : "text-gray-300 hover:bg-white/10 hover:text-white"
     }`;
 
@@ -62,69 +57,67 @@ export default function Sidebar({
 
       {/* 🔹 Sidebar */}
       <aside
-        className={`fixed md:static z-20 inset-y-0 left-0 w-64 
-        bg-gradient-to-b 
-        from-[var(--color-deep-black)] 
-        via-[var(--color-supptic-blue)] 
-        to-[var(--color-deep-black)]
-        text-white transform transition-transform duration-300
-        ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
-        md:translate-x-0`}
+        className={`
+          fixed md:static z-20 inset-y-0 left-0 w-64
+          bg-gradient-to-b
+          from-[var(--sidebar-bg-from)]
+          via-[var(--sidebar-bg-via)]
+          to-[var(--sidebar-bg-to)]
+          text-white transform transition-transform duration-300
+          ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+          md:translate-x-0
+        `}
       >
         <div className="flex flex-col h-full p-6">
 
           {/* 👑 Logo */}
           <div className="mb-10">
             <h1 className="text-2xl font-bold text-[var(--color-gold)]">
-              SUP’PTIC
+              SUP'PTIC
             </h1>
-            <p className="text-xs text-gray-400">Miss & Master</p>
+            <p className="text-xs text-gray-400">Miss &amp; Master</p>
           </div>
 
           {/* 🔹 Navigation */}
           <nav className="flex flex-col gap-3">
-            <Link
-              href="/dashboard"
-              className={linkClass("/dashboard")}
-              onClick={handleNavigation}
-            >
+            <Link href="/dashboard" className={linkClass("/dashboard")} onClick={handleNavigation}>
               <FaTachometerAlt />
-              Dashboard
+              {t("Dashboard")}
             </Link>
 
-            <Link
-              href="/candidates"
-              className={linkClass("/candidates")}
-              onClick={handleNavigation}
-            >
+            <Link href="/candidates" className={linkClass("/candidates")} onClick={handleNavigation}>
               <FaUsers />
-              Candidats
+              {t("Candidats")}
             </Link>
           </nav>
 
           {/* 🔻 Bottom */}
           <div className="mt-auto space-y-3">
 
-            {/* 🌙 Dark mode */}
+            {/* 🌙 Dark mode — synchronisé avec le contexte */}
             <button
-              onClick={toggleDarkMode}
-              className="flex items-center gap-3 w-full px-4 py-3 rounded-xl 
-              bg-white/5 border border-white/10
-              hover:bg-white/10 transition"
+              onClick={toggleTheme}
+              className="flex items-center gap-3 w-full px-4 py-3 rounded-xl
+                bg-white/5 border border-white/10
+                hover:bg-white/10 transition-all duration-200"
             >
-              <FaMoon className="text-[var(--color-gold)]" />
-              Mode sombre
+              {theme === "dark" ? (
+                <FaSun className="text-[var(--color-gold)]" />
+              ) : (
+                <FaMoon className="text-[var(--color-gold)]" />
+              )}
+              <span>{t(theme === "dark" ? "Mode clair" : "Mode sombre")}</span>
             </button>
 
             {/* 🚪 Logout */}
             <button
               onClick={handleLogout}
-              className="flex items-center gap-3 w-full px-4 py-3 rounded-xl 
-              bg-red-500/80 hover:bg-red-600 
-              transition shadow-lg"
+              className="flex items-center gap-3 w-full px-4 py-3 rounded-xl
+                bg-red-500/80 hover:bg-red-600
+                transition-all duration-200 shadow-lg"
             >
               <FaSignOutAlt />
-              Déconnexion
+              {t("Déconnexion")}
             </button>
 
           </div>

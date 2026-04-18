@@ -1,24 +1,52 @@
 @import "tailwindcss";
 
+/* ========== PALETTE DE COULEURS ========== */
 :root {
+  /* Couleurs fixes de la charte */
   --color-gold: #d4af37;
   --color-deep-black: #0f172a;
   --color-off-white: #f8fafc;
   --color-supptic-blue: #1e3a8a;
+
+  /* MODE CLAIR — fond clair, texte sombre */
+  --background: var(--color-off-white);       /* #f8fafc */
+  --foreground: var(--color-deep-black);       /* #0f172a */
+  --surface: #ffffff;
+  --surface-alt: #e8edf5;
+  --border: rgba(15, 23, 42, 0.12);
+  --text-muted: #64748b;
+
+  /* Sidebar / Header en mode clair */
+  --sidebar-bg-from: var(--color-deep-black);
+  --sidebar-bg-via: var(--color-supptic-blue);
+  --sidebar-bg-to: var(--color-deep-black);
+  --header-bg: var(--color-deep-black);
 }
 
+/* MODE SOMBRE — positions inversées + noir profond comme fond */
+.dark {
+  --background: #050c18;                       /* Noir profond OLED */
+  --foreground: var(--color-off-white);        /* #f8fafc — texte clair */
+  --surface: var(--color-deep-black);          /* #0f172a — cartes/surfaces */
+  --surface-alt: #1a2744;
+  --border: rgba(248, 250, 252, 0.10);
+  --text-muted: #94a3b8;
+
+  /* Sidebar / Header en mode sombre : off-white → bleu → off-white */
+  --sidebar-bg-from: #0d1f3c;
+  --sidebar-bg-via: #0f172a;
+  --sidebar-bg-to: #0d1f3c;
+  --header-bg: #050c18;
+}
+
+/* ========== BASE ========== */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body {

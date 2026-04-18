@@ -5,9 +5,6 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
-import { ThemeProvider } from "@/app/ThemeProvider";
-
-const ADMIN_EMAIL = "alioumcharifa307@gmail.com";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
@@ -20,17 +17,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       const { data } = await supabase.auth.getUser();
 
       if (!data.user) {
-        router.replace("/login"); // redirige si pas connecté
-        return;
-      }
-
-      if (data.user.email !== ADMIN_EMAIL) {
-        alert("Accès refusé");
-        await supabase.auth.signOut();
         router.replace("/login");
         return;
       }
 
+      // ✅ Tout utilisateur connecté dans Supabase est autorisé
+      // (la restriction par email a été retirée — voir objectif 3)
       setAuthorized(true);
       setLoading(false);
     };
@@ -38,20 +30,32 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     checkAuth();
   }, [router]);
 
-  if (loading) return <div className="p-6">Chargement...</div>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-[var(--background)]">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 border-4 border-[var(--color-gold)] border-t-transparent rounded-full animate-spin" />
+          <p className="text-[var(--foreground)] text-sm opacity-60">Chargement...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!authorized) return null;
 
   return (
-    <ThemeProvider>
-      <div className="flex h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
-        <Sidebar sidebarOpen={false} setSidebarOpen={() => {}} />
-        <div className="flex-1 flex flex-col">
-          {/* Header avec toggle dark mode */}
-          <Header setSidebarOpen={() => {}} showThemeToggle />
+    <div className="flex h-screen bg-[var(--background)] transition-colors duration-300">
+      {/* ✅ sidebarOpen correctement passé */}
+      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-          <main className="p-6 flex-1">{children}</main>
-        </div>
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* ✅ setSidebarOpen correctement passé */}
+        <Header setSidebarOpen={setSidebarOpen} />
+
+        <main className="p-6 flex-1 overflow-y-auto">
+          {children}
+        </main>
       </div>
-    </ThemeProvider>
+    </div>
   );
 }
