@@ -14,20 +14,26 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   useEffect(() => {
     const checkAuth = async () => {
-      const { data } = await supabase.auth.getUser();
+      const { data } = await supabase.auth.getSession();
 
-      if (!data.user) {
+      if (!data.session) {
         router.replace("/login");
         return;
       }
 
-      // ✅ Tout utilisateur connecté dans Supabase est autorisé
-      // (la restriction par email a été retirée — voir objectif 3)
+      // ✅ Tout utilisateur Supabase connecté est autorisé
       setAuthorized(true);
       setLoading(false);
     };
 
     checkAuth();
+
+    // Écoute les déconnexions en temps réel (ex: depuis un autre onglet)
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session) router.replace("/login");
+    });
+
+    return () => listener.subscription.unsubscribe();
   }, [router]);
 
   if (loading) {

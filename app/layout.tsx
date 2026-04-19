@@ -27,13 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {/* LanguageProvider enveloppe toute l'app pour la traduction globale */}
           <LanguageProvider>
 
-            {isLoginPage ? (
-              <div className="flex-1 flex items-center justify-center bg-[var(--background)]">
-                {children}
-              </div>
-            ) : (
-              <AdminLayout>{children}</AdminLayout>
-            )}
+            {isLoginPage ? children : <AdminLayout>{children}</AdminLayout>}
 
             <Toaster
               position="top-right"
