@@ -75,7 +75,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
             <img
               src="/supptic-logo.jpg"
               alt="Sup'ptic Logo"
-              className="w-14 h-14 object-contain rounded-lg shrink-0"
+              className="w-20 h-20 object-contain rounded-lg shrink-0"
             />
             <div>
               <h1 className="text-2xl font-bold text-[var(--color-gold)]">
