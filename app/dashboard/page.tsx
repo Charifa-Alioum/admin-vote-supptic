@@ -4,14 +4,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { FaUser, FaVoteYea, FaCrown, FaMapMarkerAlt } from "react-icons/fa";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+
 
 interface Candidate {
   id: number;
@@ -59,10 +52,18 @@ export default function DashboardPage() {
     <ProtectedRoute>
       <div className="p-6 space-y-10">
 
+        {/* 🖼 LOGO — au-dessus du hero */}
+        <div className="flex justify-center">
+          <img
+            src="/supptic-logo.jpg"
+            alt="Sup'ptic Logo"
+            className="w-24 h-24 object-contain drop-shadow-lg"
+          />
+        </div>
+
         {/* 🎉 HERO SECTION */}
         <div
-          className="rounded-2xl p-6 border border-[var(--border)] shadow-xl
-          flex flex-col md:flex-row items-center justify-between"
+          className="rounded-2xl p-6 border border-[var(--border)] shadow-xl"
           style={{ background: "var(--surface)" }}
         >
           <div className="space-y-3">
@@ -88,15 +89,6 @@ export default function DashboardPage() {
             <p className="text-sm" style={{ color: "var(--text-muted)" }}>
               Suivi en temps réel des votes et des performances des candidats 👑
             </p>
-          </div>
-
-          {/* Logo */}
-          <div className="mt-4 md:mt-0">
-            <img
-              src="/supptic-logo.jpg"
-              alt="Sup'ptic Logo"
-              className="w-24 h-24 object-contain drop-shadow-lg"
-            />
           </div>
         </div>
 
@@ -172,31 +164,7 @@ export default function DashboardPage() {
 
         </div>
 
-        {/* 📊 GRAPHIQUE */}
-        <div
-          className="p-6 rounded-2xl border border-[var(--border)]"
-          style={{ background: "var(--surface)" }}
-        >
-          <h3 className="text-lg text-[var(--color-gold)] mb-4">
-            📊 Dynamique des votes
-          </h3>
 
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={candidates}>
-              <XAxis dataKey="name" stroke="var(--text-muted)" tick={{ fill: "var(--foreground)" }} />
-              <YAxis stroke="var(--text-muted)" tick={{ fill: "var(--foreground)" }} />
-              <Tooltip
-                contentStyle={{
-                  background: "var(--surface)",
-                  border: "1px solid var(--border)",
-                  borderRadius: "8px",
-                  color: "var(--foreground)",
-                }}
-              />
-              <Bar dataKey="votes" fill="var(--color-gold)" radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
 
       </div>
     </ProtectedRoute>

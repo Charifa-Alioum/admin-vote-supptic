@@ -71,11 +71,18 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
         <div className="flex flex-col h-full p-6">
 
           {/* 👑 Logo */}
-          <div className="mb-10">
-            <h1 className="text-2xl font-bold text-[var(--color-gold)]">
-              SUP'PTIC
-            </h1>
-            <p className="text-xs text-gray-400">Miss &amp; Master</p>
+          <div className="mb-10 flex items-center gap-3">
+            <img
+              src="/supptic-logo.jpg"
+              alt="Sup'ptic Logo"
+              className="w-10 h-10 object-contain rounded-lg shrink-0"
+            />
+            <div>
+              <h1 className="text-2xl font-bold text-[var(--color-gold)]">
+                SUP'PTIC
+              </h1>
+              <p className="text-xs text-gray-400">Miss &amp; Mister</p>
+            </div>
           </div>
 
           {/* 🔹 Navigation */}
