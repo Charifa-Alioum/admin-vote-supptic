@@ -12,7 +12,7 @@ export default function CreateCandidatePage() {
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [candidates, setCandidates] = useState<any[]>([]);
 
-  const categories = ["Master", "Miss"];
+  const categories = ["Mister", "Miss"];
   const classes = ["ADM 1", "ADM 2", "IT 1", "IT 2", "IPT 1", "IPT 2", "IPT 3", "ITT 1A", "ITT 1B", "ITT 2A", "ITT 2B", "ITT 3"];
 
   const fetchCandidates = async () => {

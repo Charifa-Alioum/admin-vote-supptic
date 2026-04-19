@@ -17,7 +17,7 @@ export default function EditCandidatePage() {
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [currentPhoto, setCurrentPhoto] = useState("");
 
-  const categories = ["Master", "Miss"];
+  const categories = ["Mister", "Miss"];
   const classes = ["ADM 1", "ADM 2", "IT 1", "IT 2", "IPT 1", "IPT 2", "IPT 3"];
 
   useEffect(() => {
