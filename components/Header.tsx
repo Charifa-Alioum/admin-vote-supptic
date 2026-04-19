@@ -10,7 +10,7 @@ interface HeaderProps {
 
 export default function Header({ setSidebarOpen }: HeaderProps) {
   const { theme, toggleTheme } = useTheme();
-  const { language, setLanguage, isTranslating } = useLanguage();
+  const { language, setLanguage } = useLanguage();
 
   return (
     <header
@@ -39,23 +39,13 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
         {/* 🌐 Switch langue */}
         <button
           onClick={() => setLanguage(language === "fr" ? "en" : "fr")}
-          disabled={isTranslating}
           title={language === "fr" ? "Switch to English" : "Passer en français"}
-          className={`
-            flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold
             border border-white/20 bg-white/5
-            hover:bg-white/15 transition-all duration-200 text-white tracking-wider
-            ${isTranslating ? "opacity-50 cursor-wait" : "cursor-pointer"}
-          `}
+            hover:bg-white/15 transition-all duration-200 text-white tracking-wider cursor-pointer"
         >
-          {isTranslating ? (
-            <span className="animate-pulse text-xs">...</span>
-          ) : (
-            <>
-              <span>{language === "fr" ? "🇫🇷" : "🇬🇧"}</span>
-              <span>{language === "fr" ? "FR" : "EN"}</span>
-            </>
-          )}
+          <span>{language === "fr" ? "🇫🇷" : "🇬🇧"}</span>
+          <span>{language === "fr" ? "FR" : "EN"}</span>
         </button>
 
         {/* 🌙 Switch thème */}
