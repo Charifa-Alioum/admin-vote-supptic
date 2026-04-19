@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import toast from "react-hot-toast";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import { useLanguage } from "@/components/LanguageProvider";
 
 export default function CreateCandidatePage() {
   const [name, setName] = useState("");
@@ -11,6 +12,7 @@ export default function CreateCandidatePage() {
   const [studentClass, setStudentClass] = useState("");
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [candidates, setCandidates] = useState<any[]>([]);
+  const { t } = useLanguage();
 
   const categories = ["Mister", "Miss"];
   const classes = ["ADM 1", "ADM 2", "IT 1", "IT 2", "IPT 1", "IPT 2", "IPT 3", "ITT 1A", "ITT 1B", "ITT 2A", "ITT 2B", "ITT 3"];
@@ -26,7 +28,7 @@ export default function CreateCandidatePage() {
 
   const handleAdd = async () => {
     if (!name || !category || !studentClass) {
-      return toast.error("Remplis tous les champs");
+      return toast.error(t("Remplis tous les champs"));
     }
 
     const exists = candidates.some(
@@ -36,21 +38,18 @@ export default function CreateCandidatePage() {
     );
 
     if (exists) {
-      return toast.error("Ce candidat existe déjà");
+      return toast.error(t("Ce candidat existe déjà"));
     }
 
     let photo_url = "";
 
     if (photoFile) {
       const fileName = `${Date.now()}.${photoFile.name.split(".").pop()}`;
-
       const { error: uploadError } = await supabase.storage
         .from("candidates-photos")
         .upload(fileName, photoFile);
 
-      if (uploadError) {
-        return toast.error(uploadError.message);
-      }
+      if (uploadError) return toast.error(uploadError.message);
 
       const { data } = supabase.storage
         .from("candidates-photos")
@@ -70,7 +69,7 @@ export default function CreateCandidatePage() {
     if (error) {
       toast.error(error.message);
     } else {
-      toast.success("Candidat ajouté 🎉");
+      toast.success(t("Candidat ajouté 🎉"));
       setName("");
       setCategory("");
       setStudentClass("");
@@ -81,64 +80,68 @@ export default function CreateCandidatePage() {
 
   return (
     <ProtectedRoute>
-      <div className="p-6 min-h-screen bg-gradient-to-br from-black via-[#0f172a] to-[#020617] text-white">
+      <div className="p-6" style={{ color: "var(--foreground)" }}>
 
-        <h1 className="text-3xl font-bold mb-6 text-yellow-400">
-          ✨ Ajouter un candidat
+        <h1 className="text-3xl font-bold mb-6 text-[var(--color-gold)]">
+          {t("✨ Ajouter un candidat")}
         </h1>
 
-        <div className="max-w-2xl bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 space-y-5 shadow-xl">
-
-          {/* Nom */}
+        <div
+          className="max-w-2xl rounded-2xl p-6 space-y-5 shadow-xl
+          border border-[var(--border)]"
+          style={{ background: "var(--surface)" }}
+        >
           <input
             type="text"
-            placeholder="Nom du candidat"
+            placeholder={t("Nom du candidat")}
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full p-3 rounded-lg bg-black/40 border border-gray-700 focus:ring-2 focus:ring-yellow-400"
+            className="w-full p-3 rounded-lg border border-[var(--border)]
+            focus:outline-none focus:ring-2 focus:ring-[var(--color-gold)]"
+            style={{ background: "var(--surface-alt)", color: "var(--foreground)" }}
           />
 
-          {/* Catégorie */}
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full p-3 rounded-lg bg-black/40 border border-gray-700"
+            className="w-full p-3 rounded-lg border border-[var(--border)]"
+            style={{ background: "var(--surface-alt)", color: "var(--foreground)" }}
           >
-            <option value="">Choisir catégorie</option>
+            <option value="">{t("Choisir catégorie")}</option>
             {categories.map((c) => (
               <option key={c}>{c}</option>
             ))}
           </select>
 
-          {/* Classe */}
           <select
             value={studentClass}
             onChange={(e) => setStudentClass(e.target.value)}
-            className="w-full p-3 rounded-lg bg-black/40 border border-gray-700"
+            className="w-full p-3 rounded-lg border border-[var(--border)]"
+            style={{ background: "var(--surface-alt)", color: "var(--foreground)" }}
           >
-            <option value="">Choisir classe</option>
+            <option value="">{t("Choisir classe")}</option>
             {classes.map((c) => (
               <option key={c}>{c}</option>
             ))}
           </select>
 
-          {/* Photo */}
           <input
             type="file"
             onChange={(e) => setPhotoFile(e.target.files?.[0] || null)}
-            className="text-gray-300"
+            style={{ color: "var(--text-muted)" }}
           />
 
-          {/* Bouton */}
           <button
             onClick={handleAdd}
-            className="w-full py-3 rounded-lg font-semibold 
-            bg-gradient-to-r from-yellow-400 to-yellow-600 
-            text-black hover:scale-105 transition"
+            className="w-full py-3 rounded-lg font-semibold
+            bg-[var(--color-gold)] text-black
+            hover:bg-[var(--color-supptic-blue)] hover:text-white
+            transition-all duration-300"
           >
-            Ajouter le candidat
+            {t("Ajouter le candidat")}
           </button>
         </div>
+
       </div>
     </ProtectedRoute>
   );

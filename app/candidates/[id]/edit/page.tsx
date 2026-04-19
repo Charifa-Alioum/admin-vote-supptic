@@ -5,10 +5,12 @@ import { supabase } from "@/lib/supabase";
 import { useParams, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import { useLanguage } from "@/components/LanguageProvider";
 
 export default function EditCandidatePage() {
   const { id } = useParams();
   const router = useRouter();
+  const { t } = useLanguage();
 
   const [loading, setLoading] = useState(true);
   const [name, setName] = useState("");
@@ -18,7 +20,7 @@ export default function EditCandidatePage() {
   const [currentPhoto, setCurrentPhoto] = useState("");
 
   const categories = ["Mister", "Miss"];
-  const classes = ["ADM 1", "ADM 2", "IT 1", "IT 2", "IPT 1", "IPT 2", "IPT 3"];
+  const classes = ["ADM 1", "ADM 2", "IT 1", "IT 2", "IPT 1", "IPT 2", "IPT 3", "ITT 1A", "ITT 1B", "ITT 2A", "ITT 2B", "ITT 3"];
 
   useEffect(() => {
     const fetchCandidate = async () => {
@@ -45,7 +47,6 @@ export default function EditCandidatePage() {
 
     if (photoFile) {
       const fileName = `${Date.now()}.${photoFile.name.split(".").pop()}`;
-
       const { error: uploadError } = await supabase.storage
         .from("candidates-photos")
         .upload(fileName, photoFile);
@@ -61,44 +62,56 @@ export default function EditCandidatePage() {
 
     const { error } = await supabase
       .from("candidates")
-      .update({
-        name,
-        category,
-        student_class: studentClass,
-        photo_url,
-      })
+      .update({ name, category, student_class: studentClass, photo_url })
       .eq("id", id);
 
     if (error) {
       toast.error(error.message);
     } else {
-      toast.success("Candidat mis à jour ✨");
+      toast.success(t("Candidat mis à jour ✨"));
       router.push("/candidates");
     }
   };
 
-  if (loading) return <p className="p-6 text-white">Chargement...</p>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-[var(--background)]">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 border-4 border-[var(--color-gold)] border-t-transparent rounded-full animate-spin" />
+          <p className="text-sm" style={{ color: "var(--text-muted)" }}>
+            {t("Chargement...")}
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <ProtectedRoute>
-      <div className="p-6 min-h-screen bg-gradient-to-br from-black via-[#0f172a] to-[#020617] text-white">
+      <div className="p-6" style={{ color: "var(--foreground)" }}>
 
-        <h1 className="text-3xl font-bold mb-6 text-yellow-400">
-          ✏️ Modifier candidat
+        <h1 className="text-3xl font-bold mb-6 text-[var(--color-gold)]">
+          {t("✏️ Modifier candidat")}
         </h1>
 
-        <div className="max-w-2xl bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 space-y-5 shadow-xl">
-
+        <div
+          className="max-w-2xl rounded-2xl p-6 space-y-5 shadow-xl
+          border border-[var(--border)]"
+          style={{ background: "var(--surface)" }}
+        >
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full p-3 rounded-lg bg-black/40 border border-gray-700"
+            className="w-full p-3 rounded-lg border border-[var(--border)]
+            focus:outline-none focus:ring-2 focus:ring-[var(--color-gold)]"
+            style={{ background: "var(--surface-alt)", color: "var(--foreground)" }}
           />
 
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full p-3 rounded-lg bg-black/40 border border-gray-700"
+            className="w-full p-3 rounded-lg border border-[var(--border)]"
+            style={{ background: "var(--surface-alt)", color: "var(--foreground)" }}
           >
             {categories.map((c) => (
               <option key={c}>{c}</option>
@@ -108,35 +121,39 @@ export default function EditCandidatePage() {
           <select
             value={studentClass}
             onChange={(e) => setStudentClass(e.target.value)}
-            className="w-full p-3 rounded-lg bg-black/40 border border-gray-700"
+            className="w-full p-3 rounded-lg border border-[var(--border)]"
+            style={{ background: "var(--surface-alt)", color: "var(--foreground)" }}
           >
             {classes.map((c) => (
               <option key={c}>{c}</option>
             ))}
           </select>
 
-          {/* Photo actuelle */}
           {currentPhoto && (
             <img
               src={currentPhoto}
-              className="w-24 h-24 object-cover rounded-full border-2 border-yellow-400"
+              alt={name}
+              className="w-24 h-24 object-cover rounded-full border-2 border-[var(--color-gold)]"
             />
           )}
 
           <input
             type="file"
             onChange={(e) => setPhotoFile(e.target.files?.[0] || null)}
+            style={{ color: "var(--text-muted)" }}
           />
 
           <button
             onClick={handleUpdate}
-            className="w-full py-3 rounded-lg font-semibold 
-            bg-gradient-to-r from-yellow-400 to-yellow-600 
-            text-black hover:scale-105 transition"
+            className="w-full py-3 rounded-lg font-semibold
+            bg-[var(--color-gold)] text-black
+            hover:bg-[var(--color-supptic-blue)] hover:text-white
+            transition-all duration-300"
           >
-            Enregistrer les modifications
+            {t("Enregistrer les modifications")}
           </button>
         </div>
+
       </div>
     </ProtectedRoute>
   );

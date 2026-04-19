@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import { useLanguage } from "@/components/LanguageProvider";
 import { FaUser, FaVoteYea, FaCrown, FaMapMarkerAlt } from "react-icons/fa";
-
 
 interface Candidate {
   id: number;
@@ -16,6 +16,7 @@ interface Candidate {
 
 export default function DashboardPage() {
   const [candidates, setCandidates] = useState<Candidate[]>([]);
+  const { t } = useLanguage();
 
   const fetchData = async () => {
     const { data, error } = await supabase.from("candidates").select("*");
@@ -52,42 +53,42 @@ export default function DashboardPage() {
     <ProtectedRoute>
       <div className="p-6 space-y-10">
 
-        {/* 🖼 LOGO — au-dessus du hero */}
+        {/* 🖼 LOGO */}
         <div className="flex justify-center">
           <img
             src="/supptic-logo.jpg"
             alt="Sup'ptic Logo"
-            className="w-64 h-64 object-contain drop-shadow-lg"
+            className="w-40 h-40 object-contain drop-shadow-lg"
           />
         </div>
 
-        {/* 🎉 HERO SECTION */}
+        {/* 🎉 HERO */}
         <div
           className="rounded-2xl p-6 border border-[var(--border)] shadow-xl"
           style={{ background: "var(--surface)" }}
         >
           <div className="space-y-3">
             <h1 className="text-3xl md:text-4xl font-bold text-[var(--color-gold)] flex items-center gap-3">
-              <FaCrown /> Élection Miss &amp; Mister
+              <FaCrown /> {t("Élection Miss & Mister")}
             </h1>
 
             <p className="text-lg" style={{ color: "var(--text-muted)" }}>
-              🎉 Événement :{" "}
+              🎉 {t("Événement :")}{" "}
               <span className="font-semibold" style={{ color: "var(--foreground)" }}>
-                Journée culturelle
+                {t("Journée culturelle")}
               </span>
             </p>
 
             <p className="text-lg flex items-center gap-2" style={{ color: "var(--text-muted)" }}>
               <FaMapMarkerAlt className="text-[var(--color-supptic-blue)]" />
-              Lieu :{" "}
+              {t("Lieu :")}{" "}
               <span className="font-semibold" style={{ color: "var(--foreground)" }}>
                 Sup'ptic
               </span>
             </p>
 
             <p className="text-sm" style={{ color: "var(--text-muted)" }}>
-              Suivi en temps réel des votes et des performances des candidats 👑
+              {t("Suivi en temps réel des votes et des performances des candidats 👑")}
             </p>
           </div>
         </div>
@@ -102,7 +103,7 @@ export default function DashboardPage() {
           >
             <FaUser className="text-[var(--color-gold)] text-3xl shrink-0" />
             <div>
-              <p style={{ color: "var(--text-muted)" }}>Candidats inscrits</p>
+              <p style={{ color: "var(--text-muted)" }}>{t("Candidats inscrits")}</p>
               <p className="text-2xl font-bold" style={{ color: "var(--foreground)" }}>
                 {totalCandidates}
               </p>
@@ -116,7 +117,7 @@ export default function DashboardPage() {
           >
             <FaVoteYea className="text-[var(--color-supptic-blue)] text-3xl shrink-0" />
             <div>
-              <p style={{ color: "var(--text-muted)" }}>Votes exprimés</p>
+              <p style={{ color: "var(--text-muted)" }}>{t("Votes exprimés")}</p>
               <p className="text-2xl font-bold" style={{ color: "var(--foreground)" }}>
                 {totalVotes}
               </p>
@@ -137,9 +138,9 @@ export default function DashboardPage() {
                   className="w-16 h-16 rounded-full object-cover border-2 border-white"
                 />
                 <div>
-                  <p className="text-sm opacity-80">👑 Top Miss</p>
+                  <p className="text-sm opacity-80">{t("👑 Top Miss")}</p>
                   <p className="text-xl font-bold">{topMiss.name}</p>
-                  <p className="text-sm">{topMiss.votes} votes</p>
+                  <p className="text-sm">{topMiss.votes} {t("votes")}</p>
                 </div>
               </div>
             </div>
@@ -154,17 +155,15 @@ export default function DashboardPage() {
                   className="w-16 h-16 rounded-full object-cover border-2 border-white"
                 />
                 <div>
-                  <p className="text-sm opacity-80">👑 Top Mister</p>
+                  <p className="text-sm opacity-80">{t("👑 Top Mister")}</p>
                   <p className="text-xl font-bold">{topMaster.name}</p>
-                  <p className="text-sm">{topMaster.votes} votes</p>
+                  <p className="text-sm">{topMaster.votes} {t("votes")}</p>
                 </div>
               </div>
             </div>
           )}
 
         </div>
-
-
 
       </div>
     </ProtectedRoute>
