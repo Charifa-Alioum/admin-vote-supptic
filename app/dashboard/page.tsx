@@ -57,7 +57,7 @@ export default function DashboardPage() {
           <img
             src="/supptic-logo.jpg"
             alt="Sup'ptic Logo"
-            className="w-24 h-24 object-contain drop-shadow-lg"
+            className="w-40 h-40 object-contain drop-shadow-lg"
           />
         </div>
 
