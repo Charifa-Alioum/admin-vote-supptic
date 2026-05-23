@@ -9,6 +9,7 @@ interface Candidate {
   id?: number;
   name: string;
   category: string;
+  cultural_area: string;
   student_class: string;
   votes: number;
   photo_url?: string;
@@ -61,7 +62,7 @@ export default function CandidatesPage() {
             <tr>
               <th className="p-4 text-left">{t("Photo")}</th>
               <th className="p-4 text-left">{t("Nom")}</th>
-              <th className="p-4 text-left">{t("Catégorie")}</th>
+              <th className="p-4 text-left">{t("Aire culturelle")}</th>
               <th className="p-4 text-left">{t("Classe")}</th>
               <th className="p-4 text-left">{t("Votes")}</th>
               <th className="p-4 text-left">{t("Actions")}</th>
@@ -88,14 +89,8 @@ export default function CandidatesPage() {
                   {c.name}
                 </td>
 
-                <td className="p-4">
-                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                    c.category === "Miss"
-                      ? "bg-pink-500/20 text-pink-500"
-                      : "bg-blue-500/20 text-blue-500"
-                  }`}>
-                    {c.category}
-                  </span>
+                <td className="p-4" style={{ color: "var(--text-muted)" }}>
+                  {c.cultural_area ?? "—"}
                 </td>
 
                 <td className="p-4" style={{ color: "var(--text-muted)" }}>

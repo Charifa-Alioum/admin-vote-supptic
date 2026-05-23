@@ -3,18 +3,19 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import toast from "react-hot-toast";
-import ProtectedRoute from "@/components/ProtectedRoute";
 import { useLanguage } from "@/components/LanguageProvider";
 
 export default function CreateCandidatePage() {
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
   const [studentClass, setStudentClass] = useState("");
+  const [culturalArea, setCulturalArea] = useState("");
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [candidates, setCandidates] = useState<any[]>([]);
   const { t } = useLanguage();
 
-  const categories = ["Mister", "Miss"];
+  const categories = ["Miss"];
+  const aires_culturelles = ["Fang Beti", "Grassfield", "Sawa", "Soudano-Sahelienne"];
   const classes = ["ADM 1", "ADM 2", "IT 1", "IT 2", "IPT 1", "IPT 2", "IPT 3", "ITT 1A", "ITT 1B", "ITT 2A", "ITT 2B", "ITT 3"];
 
   const fetchCandidates = async () => {
@@ -27,7 +28,7 @@ export default function CreateCandidatePage() {
   }, []);
 
   const handleAdd = async () => {
-    if (!name || !category || !studentClass) {
+    if (!name || !category || !studentClass || !culturalArea) {
       return toast.error(t("Remplis tous les champs"));
     }
 
@@ -62,6 +63,7 @@ export default function CreateCandidatePage() {
       name,
       category,
       student_class: studentClass,
+      cultural_area: culturalArea,
       votes: 0,
       photo_url,
     });
@@ -73,76 +75,92 @@ export default function CreateCandidatePage() {
       setName("");
       setCategory("");
       setStudentClass("");
+      setCulturalArea("");
       setPhotoFile(null);
       fetchCandidates();
     }
   };
 
   return (
-    <ProtectedRoute>
-      <div className="p-6" style={{ color: "var(--foreground)" }}>
+    <div className="p-6" style={{ color: "var(--foreground)" }}>
 
-        <h1 className="text-3xl font-bold mb-6 text-[var(--color-gold)]">
-          {t("✨ Ajouter un candidat")}
-        </h1>
+      <h1 className="text-3xl font-bold mb-6 text-[var(--color-gold)]">
+        {t("✨ Ajouter un candidat")}
+      </h1>
 
-        <div
-          className="max-w-2xl rounded-2xl p-6 space-y-5 shadow-xl
-          border border-[var(--border)]"
-          style={{ background: "var(--surface)" }}
+      <div
+        className="max-w-2xl rounded-2xl p-6 space-y-5 shadow-xl border border-[var(--border)]"
+        style={{ background: "var(--surface)" }}
+      >
+        {/* Nom */}
+        <input
+          type="text"
+          placeholder={t("Nom du candidat")}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="w-full p-3 rounded-lg border border-[var(--border)]
+          focus:outline-none focus:ring-2 focus:ring-[var(--color-gold)]"
+          style={{ background: "var(--surface-alt)", color: "var(--foreground)" }}
+        />
+
+        {/* Catégorie */}
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          className="w-full p-3 rounded-lg border border-[var(--border)]"
+          style={{ background: "var(--surface-alt)", color: "var(--foreground)" }}
         >
-          <input
-            type="text"
-            placeholder={t("Nom du candidat")}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full p-3 rounded-lg border border-[var(--border)]
-            focus:outline-none focus:ring-2 focus:ring-[var(--color-gold)]"
-            style={{ background: "var(--surface-alt)", color: "var(--foreground)" }}
-          />
+          <option value="">{t("Choisir catégorie")}</option>
+          {categories.map((c) => (
+            <option key={c}>{c}</option>
+          ))}
+        </select>
 
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="w-full p-3 rounded-lg border border-[var(--border)]"
-            style={{ background: "var(--surface-alt)", color: "var(--foreground)" }}
-          >
-            <option value="">{t("Choisir catégorie")}</option>
-            {categories.map((c) => (
-              <option key={c}>{c}</option>
-            ))}
-          </select>
+        {/* Aire culturelle */}
+        <select
+          value={culturalArea}
+          onChange={(e) => setCulturalArea(e.target.value)}
+          className="w-full p-3 rounded-lg border border-[var(--border)]"
+          style={{ background: "var(--surface-alt)", color: "var(--foreground)" }}
+        >
+          <option value="">{t("Choisir aire culturelle")}</option>
+          {aires_culturelles.map((a) => (
+            <option key={a}>{a}</option>
+          ))}
+        </select>
 
-          <select
-            value={studentClass}
-            onChange={(e) => setStudentClass(e.target.value)}
-            className="w-full p-3 rounded-lg border border-[var(--border)]"
-            style={{ background: "var(--surface-alt)", color: "var(--foreground)" }}
-          >
-            <option value="">{t("Choisir classe")}</option>
-            {classes.map((c) => (
-              <option key={c}>{c}</option>
-            ))}
-          </select>
+        {/* Classe */}
+        <select
+          value={studentClass}
+          onChange={(e) => setStudentClass(e.target.value)}
+          className="w-full p-3 rounded-lg border border-[var(--border)]"
+          style={{ background: "var(--surface-alt)", color: "var(--foreground)" }}
+        >
+          <option value="">{t("Choisir classe")}</option>
+          {classes.map((c) => (
+            <option key={c}>{c}</option>
+          ))}
+        </select>
 
-          <input
-            type="file"
-            onChange={(e) => setPhotoFile(e.target.files?.[0] || null)}
-            style={{ color: "var(--text-muted)" }}
-          />
+        {/* Photo */}
+        <input
+          type="file"
+          onChange={(e) => setPhotoFile(e.target.files?.[0] || null)}
+          style={{ color: "var(--text-muted)" }}
+        />
 
-          <button
-            onClick={handleAdd}
-            className="w-full py-3 rounded-lg font-semibold
-            bg-[var(--color-gold)] text-black
-            hover:bg-[var(--color-supptic-blue)] hover:text-white
-            transition-all duration-300"
-          >
-            {t("Ajouter le candidat")}
-          </button>
-        </div>
-
+        {/* Bouton */}
+        <button
+          onClick={handleAdd}
+          className="w-full py-3 rounded-lg font-semibold
+          bg-[var(--color-gold)] text-black
+          hover:bg-[var(--color-supptic-blue)] hover:text-white
+          transition-all duration-300"
+        >
+          {t("Ajouter le candidat")}
+        </button>
       </div>
-    </ProtectedRoute>
+
+    </div>
   );
 }

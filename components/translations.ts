@@ -6,6 +6,7 @@ export const translations: Record<Language, Record<string, string>> = {
     // Navigation
     "Dashboard": "Dashboard",
     "Candidats": "Candidats",
+    "Historique": "Historique",
     "Déconnexion": "Déconnexion",
     "Mode sombre": "Mode sombre",
     "Mode clair": "Mode clair",
@@ -67,12 +68,23 @@ export const translations: Record<Language, Record<string, string>> = {
     "Vérification de la session...": "Vérification de la session...",
     "⏱ Session expirée par inactivité. Veuillez vous reconnecter.": "⏱ Session expirée par inactivité. Veuillez vous reconnecter.",
     "⏱ Session expirée. Veuillez vous reconnecter.": "⏱ Session expirée. Veuillez vous reconnecter.",
+
+    // Transactions
+    "Historique des transactions": "Historique des transactions",
+    "Total général": "Total général",
+    "Total du jour": "Total du jour",
+    "Référence": "Référence",
+    "Candidat": "Candidat",
+    "Montant": "Montant",
+    "Date": "Date",
+    "Aucune transaction enregistrée.": "Aucune transaction enregistrée.",
   },
 
   en: {
     // Navigation
     "Dashboard": "Dashboard",
     "Candidats": "Candidates",
+    "Historique": "History",
     "Déconnexion": "Log out",
     "Mode sombre": "Dark mode",
     "Mode clair": "Light mode",
@@ -134,5 +146,21 @@ export const translations: Record<Language, Record<string, string>> = {
     "Vérification de la session...": "Checking session...",
     "⏱ Session expirée par inactivité. Veuillez vous reconnecter.": "⏱ Session expired due to inactivity. Please sign in again.",
     "⏱ Session expirée. Veuillez vous reconnecter.": "⏱ Session expired. Please sign in again.",
+
+    // Transactions
+    "Historique des transactions": "Transaction history",
+    "Total général": "Overall total",
+    "Total du jour": "Today's total",
+    "Référence": "Reference",
+    "Candidat": "Candidate",
+    "Montant": "Amount",
+    "Date": "Date",
+    "Aucune transaction enregistrée.": "No transactions recorded.",
+    "Aire culturelle": "Aire culturelle",   // fr
+    "Aire culturelle": "Cultural area",      // en
+    // fr
+    "Choisir aire culturelle": "Choisir aire culturelle",
+    // en
+    "Choisir aire culturelle": "Choose cultural area",
   },
 };
