@@ -156,11 +156,7 @@ export const translations: Record<Language, Record<string, string>> = {
     "Montant": "Amount",
     "Date": "Date",
     "Aucune transaction enregistrée.": "No transactions recorded.",
-    "Aire culturelle": "Aire culturelle",   // fr
     "Aire culturelle": "Cultural area",      // en
-    // fr
-    "Choisir aire culturelle": "Choisir aire culturelle",
-    // en
     "Choisir aire culturelle": "Choose cultural area",
   },
 };
